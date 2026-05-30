@@ -305,7 +305,7 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
             ref={videoRef}
             className="absolute inset-0 w-full h-full object-cover object-center"
             autoPlay loop muted playsInline
-            poster="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=1400&q=80"
+            // poster="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=1400&q=80"
             onError={() => setVideoError(true)}
           >
             <source src="/videos/hero-fashion.mp4" type="video/mp4" />

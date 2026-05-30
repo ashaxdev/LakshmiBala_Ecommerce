@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCart } from '../../context/CartContext';
@@ -69,15 +70,17 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16 md:h-20">
             
             {/* Logo */}
-            <Link href="/" className="flex flex-col items-start">
-              <span className="font-vibes text-2xl md:text-3xl text-primary leading-none">
-                LakshmiBala
-              </span>
+            <Link href="/" className="flex items-center">
+  <Image
+    src="/images/laklogo.png"
+    alt="LakshmiBala Fashion Hub"
+    width={60}
+    height={12}
+    priority
+    className="h-auto w-auto object-contain"
+  />
+</Link>
 
-              <span className="font-playfair text-xs md:text-sm text-secondary tracking-[0.2em] uppercase leading-none">
-                Fashion Hub
-              </span>
-            </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
