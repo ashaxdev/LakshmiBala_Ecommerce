@@ -40,6 +40,37 @@ const categories = [
   },
 ];
 
+const heroSlides = [
+  {
+    id: 1,
+    image: 'images/1.jpeg',
+    tag: 'Welcome to',
+    heading: 'LakshmiBala\nClothing Store',
+    sub: 'Premium kurtis, comfortable nighties, quality innerwear — delivered to your doorstep across India from the heart of Sivakasi, Tamil Nadu.',
+    primaryCta: { label: "Shop Women's Collection", href: '/collections/womens-kurtis' },
+    secondaryCta: { label: "Men's Innerwear", href: '/collections/mens-innerwear' },
+  },
+  {
+    id: 2,
+    image: 'images/4.jpeg',
+    tag: 'Special Offer',
+    heading: 'Get 20% Off\nYour First Order',
+    sub: 'Use code WELCOME20 at checkout. Valid on all online orders above ₹499.',
+    code: 'WELCOME20',
+    primaryCta: { label: 'Claim Offer', href: '/collections/womens-kurtis' },
+    secondaryCta: null,
+  },
+  {
+    id: 3,
+    image: 'images/5.jpeg',
+    tag: 'Comfort Essentials',
+    heading: 'Sleep Better\nEvery Night',
+    sub: 'Breathable nighties and innerwear for the whole family — premium cotton, everyday prices.',
+    primaryCta: { label: 'Shop Nighties', href: '/collections/womens-nighties' },
+    secondaryCta: { label: "Women's Innerwear", href: '/collections/womens-innerwear' },
+  },
+];
+
 const bannerSlides = [
   {
     id: 1,
@@ -74,10 +105,10 @@ const bannerSlides = [
 ];
 
 const features = [
-  { icon: FiTruck,       title: 'Free Delivery',   desc: 'On orders above ₹599',      color: 'text-rose-600',  bg: 'bg-rose-50'   },
-  { icon: FiShield,      title: 'Secure Payment',  desc: 'UPI, Card & COD accepted',   color: 'text-amber-600', bg: 'bg-amber-50'  },
-  { icon: FiRefreshCw,   title: 'Easy Returns',    desc: '7-day hassle-free returns',  color: 'text-rose-600',  bg: 'bg-rose-50'   },
-  { icon: FiHeadphones,  title: '24/7 Support',    desc: 'Always here to help you',    color: 'text-amber-600', bg: 'bg-amber-50'  },
+  { icon: FiTruck,      title: 'Free Delivery',  desc: 'On orders above ₹599',     color: 'text-pink-600',  bg: 'bg-pink-50'   },
+  { icon: FiShield,     title: 'Secure Payment', desc: 'UPI, Card & COD accepted',  color: 'text-rose-600',  bg: 'bg-rose-50'   },
+  { icon: FiRefreshCw,  title: 'Easy Returns',   desc: '7-day hassle-free returns', color: 'text-pink-600',  bg: 'bg-pink-50'   },
+  { icon: FiHeadphones, title: '24/7 Support',   desc: 'Always here to help you',   color: 'text-rose-600',  bg: 'bg-rose-50'   },
 ];
 
 const testimonials = [
@@ -86,9 +117,268 @@ const testimonials = [
   { name: 'Meena K.',   location: 'Coimbatore', text: 'Best innerwear I have ever bought online. True to size and excellent quality.',                        rating: 4 },
 ];
 
+/* ─── Hero Carousel ─────────────────────────────────────────────── */
+function HeroCarousel() {
+  const [active, setActive]           = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [touchStart, setTouchStart]   = useState(null);
+  const timerRef = useRef(null);
+
+  const goTo = useCallback((idx) => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setActive(idx);
+    setTimeout(() => setIsAnimating(false), 700);
+  }, [isAnimating]);
+
+  const next = useCallback(() => goTo((active + 1) % heroSlides.length), [active, goTo]);
+  const prev = useCallback(() => goTo((active - 1 + heroSlides.length) % heroSlides.length), [active, goTo]);
+
+  useEffect(() => {
+    timerRef.current = setInterval(next, 5500);
+    return () => clearInterval(timerRef.current);
+  }, [next]);
+
+  const pauseTimer = () => clearInterval(timerRef.current);
+  const resumeTimer = () => { timerRef.current = setInterval(next, 5500); };
+
+  const onTouchStart = (e) => setTouchStart(e.touches[0].clientX);
+  const onTouchEnd = (e) => {
+    if (touchStart === null) return;
+    const diff = touchStart - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
+    setTouchStart(null);
+  };
+
+  return (
+    <section
+  className="relative w-full h-screen overflow-hidden"
+  onMouseEnter={pauseTimer}
+  onMouseLeave={resumeTimer}
+  onTouchStart={onTouchStart}
+  onTouchEnd={onTouchEnd}
+>
+  {heroSlides.map((slide, i) => (
+    <div
+      key={slide.id}
+      className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+      style={{
+        opacity: active === i ? 1 : 0,
+        zIndex: active === i ? 10 : 0,
+      }}
+    >
+      {/* Background Image */}
+      <img
+        src={slide.image}
+        alt={slide.heading}
+        className="absolute inset-0 w-full h-full object-cover object-center"
+        loading={i === 0 ? 'eager' : 'lazy'}
+      />
+
+      {/* Luxury Overlay */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            'linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.55))',
+        }}
+      />
+
+      {/* Decorative Gradient */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,.25) 100%)',
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative z-20 flex items-center justify-center h-full px-6">
+        <div className="max-w-5xl text-center text-white">
+
+          {/* Tag */}
+          <span className="inline-block px-5 py-2 mb-6 text-xs md:text-sm tracking-[4px] uppercase rounded-full border border-white/30 backdrop-blur-sm bg-white/10">
+            {slide.tag}
+          </span>
+
+          {/* Heading */}
+          <h1
+            className="
+              font-bold
+              leading-tight
+              mb-6
+              text-4xl
+              sm:text-5xl
+              md:text-6xl
+              lg:text-7xl
+            "
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              textShadow: '0 5px 25px rgba(0,0,0,.4)',
+            }}
+          >
+            {slide.heading}
+          </h1>
+
+          {/* Subtitle */}
+          <p
+            className="
+              max-w-2xl
+              mx-auto
+              text-base
+              md:text-lg
+              lg:text-xl
+              text-white/90
+              mb-10
+            "
+            style={{
+              fontFamily: "'Playfair Display', serif",
+            }}
+          >
+            {slide.sub}
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link
+              href={slide.primaryCta.href}
+              className="
+                px-8
+                py-4
+                rounded-full
+                bg-rose-600
+                hover:bg-rose-700
+                text-white
+                font-semibold
+                transition-all
+                duration-300
+                hover:scale-105
+              "
+            >
+              {slide.primaryCta.label}
+            </Link>
+
+            {slide.secondaryCta && (
+              <Link
+                href={slide.secondaryCta.href}
+                className="
+                  px-8
+                  py-4
+                  rounded-full
+                  border
+                  border-white
+                  text-white
+                  hover:bg-white
+                  hover:text-black
+                  transition-all
+                  duration-300
+                  hover:scale-105
+                  font-semibold
+                "
+              >
+                {slide.secondaryCta.label}
+              </Link>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  ))}
+
+  {/* Previous Button */}
+  <button
+    onClick={prev}
+    className="
+      absolute
+      left-6
+      top-1/2
+      -translate-y-1/2
+      z-30
+      w-12
+      h-12
+      rounded-full
+      bg-white/15
+      backdrop-blur-md
+      text-white
+      hover:bg-white/25
+      flex
+      items-center
+      justify-center
+      transition
+    "
+  >
+    <FiChevronLeft size={24} />
+  </button>
+
+  {/* Next Button */}
+  <button
+    onClick={next}
+    className="
+      absolute
+      right-6
+      top-1/2
+      -translate-y-1/2
+      z-30
+      w-12
+      h-12
+      rounded-full
+      bg-white/15
+      backdrop-blur-md
+      text-white
+      hover:bg-white/25
+      flex
+      items-center
+      justify-center
+      transition
+    "
+  >
+    <FiChevronRight size={24} />
+  </button>
+
+  {/* Dots */}
+  <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-3">
+    {heroSlides.map((_, i) => (
+      <button
+        key={i}
+        onClick={() => goTo(i)}
+        className={`transition-all duration-300 rounded-full ${
+          active === i
+            ? 'w-10 h-2 bg-white'
+            : 'w-2 h-2 bg-white/50'
+        }`}
+      />
+    ))}
+  </div>
+
+  {/* Progress Bar */}
+  <div className="absolute bottom-0 left-0 w-full h-[3px] bg-white/10 z-30">
+    <div
+      key={active}
+      className="h-full bg-rose-500 origin-left"
+      style={{
+        animation: 'heroProgress 5s linear forwards',
+      }}
+    />
+  </div>
+
+  <style jsx>{`
+    @keyframes heroProgress {
+      from {
+        transform: scaleX(0);
+      }
+      to {
+        transform: scaleX(1);
+      }
+    }
+  `}</style>
+</section>
+  );
+}
+
 /* ─── Banner Carousel ───────────────────────────────────────────── */
 function BannerCarousel() {
-  const [active, setActive]         = useState(0);
+  const [active, setActive]           = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const timerRef = useRef(null);
 
@@ -123,14 +413,14 @@ function BannerCarousel() {
             onError={(e) => {
               e.currentTarget.style.display = 'none';
               e.currentTarget.parentElement.style.background =
-                'linear-gradient(135deg,#831843 0%,#9d174d 50%,#be185d 100%)';
+                'linear-gradient(135deg,#fce7f3 0%,#fbcfe8 50%,#f9a8d4 100%)';
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-pink-950/85 via-pink-900/50 to-transparent" />
 
           <div className="absolute inset-0 flex items-center px-6 sm:px-12 md:px-16">
             <div className="max-w-sm sm:max-w-md">
-              <span className="inline-block font-sans text-[10px] sm:text-xs tracking-widest uppercase text-yellow-300 bg-yellow-400/20 border border-yellow-300/30 px-3 py-1 rounded-full mb-3 sm:mb-4">
+              <span className="inline-block font-sans text-[10px] sm:text-xs tracking-widest uppercase text-pink-200 bg-pink-400/20 border border-pink-300/30 px-3 py-1 rounded-full mb-3 sm:mb-4">
                 {slide.tag}
               </span>
               <h2 className="font-serif text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 sm:mb-4 whitespace-pre-line">
@@ -142,14 +432,14 @@ function BannerCarousel() {
               {slide.code && (
                 <p className="text-xs sm:text-sm mb-4 hidden sm:block">
                   Use code{' '}
-                  <span className="font-bold text-yellow-300 bg-white/15 border border-white/25 px-2 py-0.5 rounded tracking-wider">
+                  <span className="font-bold text-pink-200 bg-white/15 border border-white/25 px-2 py-0.5 rounded tracking-wider">
                     {slide.code}
                   </span>
                 </p>
               )}
               <Link
                 href={slide.href}
-                className="inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-white text-xs sm:text-sm font-semibold px-5 sm:px-7 py-2.5 sm:py-3 rounded-full transition-colors"
+                className="inline-flex items-center gap-2 bg-pink-500 hover:bg-pink-400 text-white text-xs sm:text-sm font-semibold px-5 sm:px-7 py-2.5 sm:py-3 rounded-full transition-colors"
               >
                 {slide.cta} <FiArrowRight size={13} />
               </Link>
@@ -158,30 +448,28 @@ function BannerCarousel() {
         </div>
       ))}
 
-      {/* Prev / Next */}
       <button
         onClick={prev}
-        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center border border-white/20 transition-all"
+        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center border border-white/20 transition-all"
         aria-label="Previous slide"
       >
         <FiChevronLeft size={16} />
       </button>
       <button
         onClick={next}
-        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center border border-white/20 transition-all"
+        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center border border-white/20 transition-all"
         aria-label="Next slide"
       >
         <FiChevronRight size={16} />
       </button>
 
-      {/* Dots */}
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
         {bannerSlides.map((_, i) => (
           <button
             key={i}
             onClick={() => goTo(i)}
             className={`rounded-full transition-all duration-300 ${
-              i === active ? 'w-5 h-2 bg-yellow-400' : 'w-2 h-2 bg-white/50 hover:bg-white/80'
+              i === active ? 'w-5 h-2 bg-pink-300' : 'w-2 h-2 bg-white/50 hover:bg-white/80'
             }`}
             aria-label={`Go to slide ${i + 1}`}
           />
@@ -195,202 +483,64 @@ function BannerCarousel() {
 function SectionHeading({ script, title, dividerText }) {
   return (
     <div className="text-center mb-8 sm:mb-10 md:mb-12">
-      <p className="font-serif italic text-rose-700 text-xl sm:text-2xl md:text-3xl mb-1">{script}</p>
+      <p className="font-serif italic text-pink-500 text-xl sm:text-2xl md:text-3xl mb-1">{script}</p>
       <h2 className="font-serif text-gray-900 text-2xl sm:text-3xl md:text-4xl font-bold">{title}</h2>
       <div className="flex items-center justify-center gap-3 mt-3">
-        <span className="block h-px w-12 sm:w-16 bg-yellow-300" />
-        <span className="text-yellow-600 text-[10px] tracking-widest font-medium">{dividerText}</span>
-        <span className="block h-px w-12 sm:w-16 bg-yellow-300" />
+        <span className="block h-px w-12 sm:w-16 bg-pink-200" />
+        <span className="text-pink-400 text-[10px] tracking-widest font-medium">{dividerText}</span>
+        <span className="block h-px w-12 sm:w-16 bg-pink-200" />
       </div>
     </div>
   );
 }
 
+/* ─── Features Strip ────────────────────────────────────────────── */
+function FeaturesStrip() {
+  return (
+    <section className="py-8 sm:py-10 bg-white border-y border-pink-100 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+        {features.map(({ icon: Icon, title, desc, color, bg }) => (
+          <div key={title} className="flex items-center gap-3 sm:gap-4">
+            <div className={`${bg} ${color} p-2.5 sm:p-3 rounded-xl flex-shrink-0`}>
+              <Icon size={20} />
+            </div>
+            <div>
+              <p className="font-semibold text-gray-900 text-xs sm:text-sm">{title}</p>
+              <p className="text-gray-400 text-[10px] sm:text-xs mt-0.5">{desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 /* ─── Main Page ─────────────────────────────────────────────────── */
 export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const videoRef  = useRef(null);
-  const [videoError, setVideoError] = useState(false);
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(() => setVideoError(true));
-    }
-  }, []);
-
   return (
     <Layout
-      title="Premium Women's Fashion Online — Kurtis, Nighties & Innerwear | Sivakasi Fashion Hub"
-      description="Shop ethnic kurtis, comfortable nighties, and premium innerwear online. Sivakasi Fashion Hub — quality clothing delivered pan-India. Free shipping above ₹599."
+      title="Premium Women's Fashion Online — Kurtis, Nighties & Innerwear | LakshmiBala Fashion Hub"
+      description="Shop ethnic kurtis, comfortable nighties, and premium innerwear online. LakshmiBala Fashion Hub — quality clothing delivered pan-India. Free shipping above ₹599."
       keywords="women kurtis online sivakasi, buy nighties online tamil nadu, womens innerwear online india, mens innerwear buy online, ethnic wear online"
     >
 
-      {/* ══ ANNOUNCEMENT BAR ══ */}
-      {/* <div className="bg-rose-800 text-white text-center py-2 px-4 text-[11px] sm:text-xs font-medium tracking-wide">
-        🎉 Free delivery on orders above ₹599 &nbsp;|&nbsp; Use code&nbsp;
-        <span className="bg-yellow-400 text-rose-900 font-bold px-2 py-0.5 rounded-full text-[10px] tracking-wider mx-1">
-          WELCOME20
-        </span>
-        &nbsp;for 20% off your first order
-      </div> */}
+      {/* ══ HERO CAROUSEL ══ */}
+      <HeroCarousel />
 
-      {/* ══ STICKY HEADER ══ */}
-      {/* <header className="sticky top-0 z-50 bg-white border-b border-rose-100 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14 sm:h-16"> */}
-
-          {/* Logo */}
-          {/* <Link href="/" className="flex flex-col leading-tight">
-            <span className="font-serif text-rose-800 text-base sm:text-lg font-bold">Sivakasi Fashion Hub</span>
-            <span className="text-yellow-600 text-[9px] sm:text-[10px] tracking-[0.15em] uppercase font-medium hidden xs:block">
-              Premium Ethnic Wear
-            </span>
-          </Link> */}
-
-          {/* Desktop nav */}
-          {/* <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-700">
-            <Link href="/collections/womens-kurtis"   className="hover:text-rose-700 transition-colors">Kurtis</Link>
-            <Link href="/collections/womens-nighties" className="hover:text-rose-700 transition-colors">Nighties</Link>
-            <Link href="/collections/womens-innerwear" className="hover:text-rose-700 transition-colors">Women's Innerwear</Link>
-            <Link href="/collections/mens-innerwear"  className="hover:text-rose-700 transition-colors">Men's Innerwear</Link>
-            <Link href="/collections/all"             className="hover:text-rose-700 transition-colors">All</Link>
-          </nav> */}
-
-          {/* Right icons */}
-          {/* <div className="flex items-center gap-1 sm:gap-2">
-            <button aria-label="Search" className="p-2 rounded-full hover:bg-rose-50 text-gray-600 hover:text-rose-700 transition-colors">
-              <FiSearch size={18} />
-            </button>
-            <Link href="/cart" className="relative p-2 rounded-full hover:bg-rose-50 text-gray-600 hover:text-rose-700 transition-colors" aria-label="Cart">
-              <FiShoppingBag size={18} />
-              <span className="absolute top-1 right-1 bg-rose-700 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
-            </Link> */}
-            {/* Hamburger */}
-            {/* <button
-              className="md:hidden p-2 rounded-full hover:bg-rose-50 text-gray-600"
-              aria-label="Menu"
-              onClick={() => setMobileMenuOpen(v => !v)}
-            >
-              {mobileMenuOpen ? <FiX size={20} /> : <FiMenu size={20} />}
-            </button>
-          </div>
-        </div> */}
-
-        {/* Mobile menu drawer */}
-        {/* {mobileMenuOpen && (
-          <nav className="md:hidden bg-white border-t border-rose-100 px-4 pb-4 pt-2 flex flex-col gap-1">
-            {[
-              ['Kurtis', '/collections/womens-kurtis'],
-              ['Nighties', '/collections/womens-nighties'],
-              ["Women's Innerwear", '/collections/womens-innerwear'],
-              ["Men's Innerwear", '/collections/mens-innerwear'],
-              ['All Products', '/collections/all'],
-            ].map(([label, href]) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2.5 px-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-700 transition-colors"
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
-        )}
-      </header> */}
-
-      {/* ══ HERO ══ */}
-      <section className="relative overflow-hidden" style={{ minHeight: 'clamp(300px, 70vw, 85vh)' }}>
-        {!videoError ? (
-          <video
-            ref={videoRef}
-            className="absolute inset-0 w-full h-full object-cover object-center"
-            autoPlay loop muted playsInline
-            // poster="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=1400&q=80"
-            onError={() => setVideoError(true)}
-          >
-            <source src="/videos/hero-fashion.mp4" type="video/mp4" />
-          </video>
-        ) : (
-          <img
-            src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=1400&q=80"
-            alt="Fashion hero"
-            className="absolute inset-0 w-full h-full object-cover object-top"
-          />
-        )}
-
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/30 to-black/65" />
-
-        {/* Floating rings */}
-        <div className="absolute top-16 left-8 w-20 h-20 border border-yellow-300/30 rounded-full animate-pulse opacity-40 hidden sm:block" />
-        <div className="absolute bottom-24 right-12 w-14 h-14 border border-yellow-300/20 rounded-full animate-pulse opacity-30 hidden sm:block" style={{ animationDelay: '1s' }} />
-
-        <div className="relative z-10 flex items-center justify-center min-h-[inherit] px-4 py-20 sm:py-28">
-          <div className="text-center max-w-2xl mx-auto">
-            <p className="font-serif italic text-yellow-300 text-lg sm:text-2xl md:text-3xl mb-1 sm:mb-2">Welcome to</p>
-            <h1 className="font-vibes text-white text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-3 sm:mb-4">
-              LakshmiBala Fashion Hub
-            </h1>
-            <p className="font-serif text-white/80 italic text-sm sm:text-lg md:text-xl mb-4 sm:mb-6">
-              Elegance Crafted for Every Woman
-            </p>
-            <p className="text-white/65 text-xs sm:text-sm md:text-base max-w-md mx-auto mb-8 leading-relaxed px-4">
-              Premium kurtis, comfortable nighties, quality innerwear — delivered to your doorstep across India from the heart of Sivakasi, Tamil Nadu.
-            </p>
-            <div className="flex flex-col xs:flex-row gap-3 justify-center px-6 xs:px-0">
-              <Link
-                href="/collections/womens-kurtis"
-                className="bg-rose-700 hover:bg-rose-800 text-white text-sm font-semibold px-7 py-3 rounded-full transition-colors text-center"
-              >
-                Shop Women's Collection
-              </Link>
-              <Link
-                href="/collections/mens-innerwear"
-                className="bg-yellow-500 hover:bg-yellow-400 text-white text-sm font-semibold px-7 py-3 rounded-full transition-colors text-center"
-              >
-                Men's Innerwear
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 animate-bounce hidden sm:flex">
-          <span className="text-white/50 text-[10px] tracking-widest uppercase">Scroll</span>
-          <div className="w-px h-7 bg-gradient-to-b from-white/50 to-transparent" />
-        </div>
-      </section>
-
-      {/* ══ FEATURES BAR ══ */}
-      {/* <section className="bg-white border-y border-rose-100 py-5 sm:py-7 md:py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 md:gap-8">
-            {features.map(({ icon: Icon, title, desc, color, bg }) => (
-              <div
-                key={title}
-                className="flex items-center gap-3 p-3 sm:p-4 rounded-xl hover:bg-rose-50/50 transition-colors"
-              >
-                <div className={`w-9 h-9 sm:w-11 sm:h-11 rounded-full ${bg} flex items-center justify-center ${color} shrink-0`}>
-                  <Icon size={18} />
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900 text-xs sm:text-sm">{title}</p>
-                  <p className="text-gray-400 text-[10px] sm:text-xs leading-snug">{desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
+      {/* ══ FEATURES STRIP ══ */}
+      <FeaturesStrip />
 
       {/* ══ CATEGORIES ══ */}
-      <section className="py-12 sm:py-16 md:py-20 bg-rose-50/40 px-4 sm:px-6 lg:px-8">
+      <section className="py-12 sm:py-16 md:py-20 bg-pink-50/50 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <SectionHeading script="Our Collections" title="Shop by Category" dividerText="✦ EXPLORE ✦" />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {categories.map((cat) => (
               <Link key={cat.slug} href={`/collections/${cat.slug}`} className="block group">
-                <div className="relative rounded-2xl overflow-hidden border border-rose-100 shadow-sm hover:shadow-md transition-shadow"
-                  style={{ aspectRatio: '3/4' }}>
+                <div
+                  className="relative rounded-2xl overflow-hidden border border-pink-100 shadow-sm hover:shadow-md transition-shadow"
+                  style={{ aspectRatio: '3/4' }}
+                >
                   <img
                     src={cat.image}
                     alt={cat.label}
@@ -398,13 +548,11 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
                     loading="lazy"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
-                      e.currentTarget.parentElement.style.background = '#831843';
+                      e.currentTarget.parentElement.style.background = '#fce7f3';
                     }}
                   />
                   <div className={`absolute inset-0 bg-gradient-to-b ${cat.gradient}`} />
-
-                  {/* hover ring */}
-                  <div className="absolute inset-0 rounded-2xl ring-2 ring-yellow-400/0 group-hover:ring-yellow-400/50 transition-all duration-300" />
+                  <div className="absolute inset-0 rounded-2xl ring-2 ring-pink-400/0 group-hover:ring-pink-400/50 transition-all duration-300" />
 
                   <div className="absolute inset-0 flex flex-col items-center justify-end p-3 sm:p-4 pb-5 sm:pb-6">
                     <h3 className="font-serif text-white text-sm sm:text-base md:text-lg font-bold text-center leading-snug drop-shadow-md">
@@ -414,7 +562,7 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
                       {cat.desc}
                     </p>
                     <div className="mt-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                      <span className="bg-white/20 backdrop-blur-sm text-white text-[10px] sm:text-xs px-3 sm:px-4 py-1.5 rounded-full border border-white/30 font-medium">
+                      <span className="bg-pink-500/80 backdrop-blur-sm text-white text-[10px] sm:text-xs px-3 sm:px-4 py-1.5 rounded-full border border-pink-300/40 font-medium">
                         Shop Now →
                       </span>
                     </div>
@@ -432,12 +580,12 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-8 sm:mb-10 gap-2">
               <div>
-                <p className="font-serif italic text-rose-700 text-xl sm:text-2xl mb-0.5">Handpicked for You</p>
+                <p className="font-serif italic text-pink-500 text-xl sm:text-2xl mb-0.5">Handpicked for You</p>
                 <h2 className="font-serif text-gray-900 text-2xl sm:text-3xl font-bold">Featured Products</h2>
               </div>
               <Link
                 href="/collections/all"
-                className="flex items-center gap-1.5 text-sm text-rose-700 hover:text-rose-900 font-medium transition-colors self-start sm:self-auto"
+                className="flex items-center gap-1.5 text-sm text-pink-600 hover:text-pink-800 font-medium transition-colors self-start sm:self-auto"
               >
                 View All <FiArrowRight size={14} />
               </Link>
@@ -450,7 +598,7 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
       )}
 
       {/* ══ BANNER CAROUSEL ══ */}
-      <section className="py-8 sm:py-12 md:py-14 bg-rose-50/40 px-4 sm:px-6 lg:px-8">
+      <section className="py-8 sm:py-12 md:py-14 bg-pink-50/50 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <BannerCarousel />
         </div>
@@ -467,7 +615,7 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
             <div className="mt-8 text-center">
               <Link
                 href="/collections/all"
-                className="inline-flex items-center gap-2 border-2 border-rose-700 text-rose-700 hover:bg-rose-700 hover:text-white font-semibold text-sm px-8 py-3 rounded-full transition-colors"
+                className="inline-flex items-center gap-2 border-2 border-pink-500 text-pink-600 hover:bg-pink-500 hover:text-white font-semibold text-sm px-8 py-3 rounded-full transition-colors"
               >
                 View All New Arrivals <FiArrowRight size={14} />
               </Link>
@@ -485,12 +633,12 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
             className="w-full h-full object-cover object-center"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-rose-900/90 via-rose-800/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-pink-900/90 via-pink-800/70 to-transparent" />
           <div className="absolute inset-0 flex items-center px-6 sm:px-12 md:px-16">
             <div>
-              <p className="text-yellow-300 text-[10px] sm:text-xs tracking-widest uppercase mb-1 sm:mb-2">Limited Time Offer</p>
+              <p className="text-pink-200 text-[10px] sm:text-xs tracking-widest uppercase mb-1 sm:mb-2">Limited Time Offer</p>
               <h3 className="font-serif text-white text-xl sm:text-3xl md:text-4xl font-bold leading-tight mb-2 sm:mb-4">
-                Get 20% Off Your<br className="hidden xs:block" />First Order
+                Get 20% Off Your<br className="hidden xs:block" /> First Order
               </h3>
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                 <span className="bg-white/15 border border-white/30 text-white font-bold text-xs sm:text-sm px-3 sm:px-4 py-1 rounded-full tracking-wider">
@@ -498,7 +646,7 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
                 </span>
                 <Link
                   href="/collections/all"
-                  className="bg-yellow-500 hover:bg-yellow-400 text-white font-semibold text-xs sm:text-sm px-5 sm:px-6 py-2 sm:py-2.5 rounded-full transition-colors inline-flex items-center gap-1"
+                  className="bg-pink-500 hover:bg-pink-400 text-white font-semibold text-xs sm:text-sm px-5 sm:px-6 py-2 sm:py-2.5 rounded-full transition-colors inline-flex items-center gap-1"
                 >
                   Shop Now <FiArrowRight size={12} />
                 </Link>
@@ -509,27 +657,27 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
       </section>
 
       {/* ══ TESTIMONIALS ══ */}
-      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-rose-50/40">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-pink-50/50">
         <div className="max-w-7xl mx-auto">
           <SectionHeading script="Customer Love" title="What Our Customers Say" dividerText="✦ REVIEWS ✦" />
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
             {testimonials.map((t, i) => (
               <div
                 key={i}
-                className="bg-white rounded-2xl p-5 sm:p-6 border border-rose-100 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white rounded-2xl p-5 sm:p-6 border border-pink-100 shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="flex gap-0.5 mb-3">
                   {[...Array(5)].map((_, j) => (
                     <FiStar
                       key={j}
                       size={14}
-                      className={j < t.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-200 fill-gray-200'}
+                      className={j < t.rating ? 'text-pink-400 fill-pink-400' : 'text-gray-200 fill-gray-200'}
                     />
                   ))}
                 </div>
-                <p className="text-gray-700 text-sm leading-relaxed mb-4 italic">"{t.text}"</p>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4 italic">"{t.text}"</p>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-700 to-pink-500 flex items-center justify-center text-white font-serif font-bold text-base flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-rose-400 flex items-center justify-center text-white font-serif font-bold text-base flex-shrink-0">
                     {t.name[0]}
                   </div>
                   <div>
@@ -542,33 +690,6 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
           </div>
         </div>
       </section>
-
-      {/* ══ NEWSLETTER ══ */}
-      {/* <section className="py-12 sm:py-16 bg-rose-800 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-xl mx-auto text-center">
-          <p className="font-serif italic text-yellow-300 text-lg sm:text-2xl mb-1">Stay in the Loop</p>
-          <h2 className="font-serif text-white text-2xl sm:text-3xl font-bold mb-3">Get Exclusive Offers</h2>
-          <p className="text-white/70 text-xs sm:text-sm mb-6">
-            Subscribe to get notified about new arrivals, sales, and style tips.
-          </p>
-          <form
-            className="flex flex-col xs:flex-row gap-2 sm:gap-3 max-w-sm mx-auto"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <input
-              type="email"
-              placeholder="Your email address"
-              className="flex-1 rounded-full px-4 py-2.5 text-sm text-gray-900 outline-none border-2 border-transparent focus:border-yellow-400 min-w-0"
-            />
-            <button
-              type="submit"
-              className="bg-yellow-500 hover:bg-yellow-400 text-white font-semibold text-sm px-6 py-2.5 rounded-full transition-colors whitespace-nowrap"
-            >
-              Subscribe
-            </button>
-          </form>
-        </div>
-      </section> */}
 
     </Layout>
   );
