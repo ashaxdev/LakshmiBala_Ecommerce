@@ -1,3 +1,4 @@
+'use client'
 import { useRef, useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import Layout from '../components/store/Layout';
@@ -8,6 +9,9 @@ import {
   FiChevronRight, FiSearch, FiShoppingBag, FiMenu, FiX
 } from 'react-icons/fi';
 
+
+
+
 /* ─── Data ─────────────────────────────────────────────────────── */
 const categories = [
   {
@@ -15,35 +19,35 @@ const categories = [
     label: "Women's Kurtis",
     desc: 'Elegant ethnic styles',
     image: 'images/KURTHI.jpeg',
-    gradient: 'from-transparent via-pink-900/60 to-rose-900/80',
+    // gradient: 'from-transparent via-pink-900/60 to-rose-900/80',
   },
   {
     slug: 'womens-nighties',
     label: "Women's Nighties",
     desc: 'Comfortable & breathable',
     image: 'images/NIGHTY.webp',
-    gradient: 'from-transparent via-violet-900/60 to-purple-900/80',
+    // gradient: 'from-transparent via-violet-900/60 to-purple-900/80',
   },
   {
     slug: 'womens-innerwear',
     label: "Women's Innerwear",
     desc: 'Premium comfort fit',
     image: 'images/INNER.webp',
-    gradient: 'from-transparent via-rose-900/60 to-pink-900/80',
+    // gradient: 'from-transparent via-rose-900/60 to-pink-900/80',
   },
   {
     slug: 'mens-innerwear',
     label: "Men's Innerwear",
     desc: 'Everyday essentials',
-    image: 'images/MENINNER.webp',
-    gradient: 'from-transparent via-indigo-900/60 to-blue-900/80',
+    image: 'images/8.jpeg',
+    // gradient: 'from-transparent via-indigo-900/60 to-blue-900/80',
   },
 ];
 
 const heroSlides = [
   {
     id: 1,
-    image: 'images/1.jpeg',
+    image: 'images/5.jpeg',
     tag: 'Welcome to',
     heading: 'LakshmiBala\nClothing Store',
     sub: 'Premium kurtis, comfortable nighties, quality innerwear — delivered to your doorstep across India from the heart of Sivakasi, Tamil Nadu.',
@@ -62,7 +66,7 @@ const heroSlides = [
   },
   {
     id: 3,
-    image: 'images/5.jpeg',
+    image: 'images/6.jpeg',
     tag: 'Comfort Essentials',
     heading: 'Sleep Better\nEvery Night',
     sub: 'Breathable nighties and innerwear for the whole family — premium cotton, everyday prices.',
@@ -135,12 +139,12 @@ function HeroCarousel() {
   const prev = useCallback(() => goTo((active - 1 + heroSlides.length) % heroSlides.length), [active, goTo]);
 
   useEffect(() => {
-    timerRef.current = setInterval(next, 5500);
+    timerRef.current = setInterval(next, 2500);
     return () => clearInterval(timerRef.current);
   }, [next]);
 
   const pauseTimer = () => clearInterval(timerRef.current);
-  const resumeTimer = () => { timerRef.current = setInterval(next, 5500); };
+  const resumeTimer = () => { timerRef.current = setInterval(next, 2500); };
 
   const onTouchStart = (e) => setTouchStart(e.touches[0].clientX);
   const onTouchEnd = (e) => {
@@ -352,7 +356,7 @@ function HeroCarousel() {
   </div>
 
   {/* Progress Bar */}
-  <div className="absolute bottom-0 left-0 w-full h-[3px] bg-white/10 z-30">
+  {/* <div className="absolute bottom-0 left-0 w-full h-[3px] bg-white/10 z-30">
     <div
       key={active}
       className="h-full bg-rose-500 origin-left"
@@ -360,7 +364,7 @@ function HeroCarousel() {
         animation: 'heroProgress 5s linear forwards',
       }}
     />
-  </div>
+  </div> */}
 
   <style jsx>{`
     @keyframes heroProgress {
@@ -377,103 +381,259 @@ function HeroCarousel() {
 }
 
 /* ─── Banner Carousel ───────────────────────────────────────────── */
-function BannerCarousel() {
-  const [active, setActive]           = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const timerRef = useRef(null);
 
-  const goTo = useCallback((idx) => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setActive(idx);
-    setTimeout(() => setIsAnimating(false), 600);
-  }, [isAnimating]);
 
-  const next = useCallback(() => goTo((active + 1) % bannerSlides.length), [active, goTo]);
-  const prev = useCallback(() => goTo((active - 1 + bannerSlides.length) % bannerSlides.length), [active, goTo]);
+// import { useState, useEffect, useRef, useCallback } from "react";
+
+const photos = [
+  {
+    img: "images/1.jpeg",
+    label: "Collection 01",
+    title: "Evening Silhouette",
+  },
+  {
+    img: "images/3.jpeg",
+    label: "Collection 02",
+    title: "Urban Pulse",
+  },
+  {
+    img: "images/4.jpeg",
+    label: "Collection 03",
+    title: "Twilight Bloom",
+  },
+  {
+    img: "images/5.jpeg",
+    label: "Collection 04",
+    title: "Coastal Edit",
+  },
+  {
+    img: "images/6.jpeg",
+    label: "Collection 05",
+    title: "Studio Minimal",
+  },
+  {
+    img: "images/8.jpeg",
+    label: "Collection 06",
+    title: "Golden Hour",
+  },
+  {
+    img: "images/13.jpeg",
+    label: "Collection 07",
+    title: "Monochrome Story",
+  },
+];
+
+const CARD_SIZES = {
+  center: { width: 340, height: 420, opacity: 1, zIndex: 3 },
+  side1:  { width: 220, height: 300, opacity: 0.7, zIndex: 2 },
+  side2:  { width: 160, height: 220, opacity: 0.4, zIndex: 1 },
+  hidden: { width: 120, height: 160, opacity: 0,   zIndex: 0 },
+};
+
+function getRole(offset) {
+  const abs = Math.abs(offset);
+  if (abs === 0) return "center";
+  if (abs === 1) return "side1";
+  if (abs === 2) return "side2";
+  return "hidden";
+}
+
+function PhotoCardCarousel() {
+  const total = photos.length;
+  const [current, setCurrent] = useState(0);
+  const wrapRef = useRef(null);
+  const isAnimating = useRef(false);
+  const autoTimer = useRef(null);
+
+  const goTo = useCallback(
+    (idx) => {
+      if (isAnimating.current) return;
+      isAnimating.current = true;
+      setCurrent(((idx % total) + total) % total);
+      setTimeout(() => {
+        isAnimating.current = false;
+      }, 750);
+    },
+    [total]
+  );
+
+  const startAuto = useCallback(() => {
+    clearInterval(autoTimer.current);
+    autoTimer.current = setInterval(() => {
+      if (!isAnimating.current) {
+        setCurrent((prev) => (prev + 1) % total);
+      }
+    }, 2800);
+  }, [total]);
 
   useEffect(() => {
-    timerRef.current = setInterval(next, 5000);
-    return () => clearInterval(timerRef.current);
-  }, [next]);
+    startAuto();
+    return () => clearInterval(autoTimer.current);
+  }, [startAuto]);
+
+  const getOffset = (i) => {
+    let offset = i - current;
+    if (offset > total / 2) offset -= total;
+    if (offset < -total / 2) offset += total;
+    return offset;
+  };
+
+  const getTrackX = () => {
+    const ww = wrapRef.current?.offsetWidth ?? 680;
+    const gap = 20;
+    let x = ww / 2 - CARD_SIZES.center.width / 2;
+    for (let i = 0; i < current; i++) {
+      const role = getRole(getOffset(i));
+      x -= CARD_SIZES[role].width + gap;
+    }
+    return x;
+  };
 
   return (
-    <div className="relative w-full overflow-hidden rounded-2xl shadow-xl" style={{ height: 'clamp(220px, 50vw, 480px)' }}>
-      {bannerSlides.map((slide, i) => (
-        <div
-          key={slide.id}
-          className="absolute inset-0 transition-opacity duration-700"
-          style={{ opacity: i === active ? 1 : 0, zIndex: i === active ? 1 : 0 }}
-        >
-          <img
-            src={slide.image}
-            alt={slide.heading.replace('\n', ' ')}
-            className="w-full h-full object-cover object-center"
-            loading={i === 0 ? 'eager' : 'lazy'}
-            onError={(e) => {
-              e.currentTarget.style.display = 'none';
-              e.currentTarget.parentElement.style.background =
-                'linear-gradient(135deg,#fce7f3 0%,#fbcfe8 50%,#f9a8d4 100%)';
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-pink-950/85 via-pink-900/50 to-transparent" />
+    <div
+      style={{
+        width: "100%",
+        overflow: "hidden",
+        padding: "40px 0 32px",
+        boxSizing: "border-box",
+        position: "relative",
+        fontFamily: "sans-serif",
+      }}
+      ref={wrapRef}
+      onMouseEnter={() => clearInterval(autoTimer.current)}
+      onMouseLeave={startAuto}
+    >
+      {/* Left fade */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          left: 0,
+          width: 80,
+          background: "linear-gradient(to right, #fff, transparent)",
+          zIndex: 10,
+          pointerEvents: "none",
+        }}
+      />
+      {/* Right fade */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          right: 0,
+          width: 80,
+          background: "linear-gradient(to left, #fff, transparent)",
+          zIndex: 10,
+          pointerEvents: "none",
+        }}
+      />
 
-          <div className="absolute inset-0 flex items-center px-6 sm:px-12 md:px-16">
-            <div className="max-w-sm sm:max-w-md">
-              <span className="inline-block font-sans text-[10px] sm:text-xs tracking-widest uppercase text-pink-200 bg-pink-400/20 border border-pink-300/30 px-3 py-1 rounded-full mb-3 sm:mb-4">
-                {slide.tag}
-              </span>
-              <h2 className="font-serif text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 sm:mb-4 whitespace-pre-line">
-                {slide.heading}
-              </h2>
-              <p className="text-white/75 text-xs sm:text-sm md:text-base mb-4 sm:mb-6 leading-relaxed hidden sm:block">
-                {slide.sub}
-              </p>
-              {slide.code && (
-                <p className="text-xs sm:text-sm mb-4 hidden sm:block">
-                  Use code{' '}
-                  <span className="font-bold text-pink-200 bg-white/15 border border-white/25 px-2 py-0.5 rounded tracking-wider">
-                    {slide.code}
-                  </span>
-                </p>
-              )}
-              <Link
-                href={slide.href}
-                className="inline-flex items-center gap-2 bg-pink-500 hover:bg-pink-400 text-white text-xs sm:text-sm font-semibold px-5 sm:px-7 py-2.5 sm:py-3 rounded-full transition-colors"
+      {/* Track */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 20,
+          transform: `translateX(${getTrackX()}px)`,
+          transition: "transform 0.7s cubic-bezier(0.77,0,0.175,1)",
+          willChange: "transform",
+        }}
+      >
+        {photos.map((photo, i) => {
+          const offset = getOffset(i);
+          const role = getRole(offset);
+          const size = CARD_SIZES[role];
+          const isCenter = role === "center";
+
+          return (
+            <div
+              key={i}
+              onClick={() => goTo(i)}
+              style={{
+                flexShrink: 0,
+                width: size.width,
+                height: size.height,
+                borderRadius: 20,
+                overflow: "hidden",
+                cursor: isCenter ? "default" : "pointer",
+                opacity: size.opacity,
+                zIndex: size.zIndex,
+                position: "relative",
+                transition: "all 0.7s cubic-bezier(0.77,0,0.175,1)",
+                pointerEvents: role === "hidden" ? "none" : "auto",
+              }}
+            >
+              {/* Photo */}
+              <img
+                src={photo.img}
+                alt={photo.title}
+                loading="lazy"
+                style={{
+                  display: "block",
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  transform: isCenter ? "scale(1.05)" : "scale(1)",
+                  transition: "transform 0.7s ease",
+                  // paddingTop:"10px",
+                }}
+              />
+
+              {/* Dark overlay on center */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background:
+                    "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 55%)",
+                  opacity: isCenter ? 1 : 0,
+                  transition: "opacity 0.7s",
+                }}
+              />
+
+              {/* Info on center */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  padding: "18px 20px",
+                  opacity: isCenter ? 1 : 0,
+                  transform: isCenter ? "translateY(0)" : "translateY(6px)",
+                  transition: "all 0.7s 0.1s",
+                }}
               >
-                {slide.cta} <FiArrowRight size={13} />
-              </Link>
+                <p
+                  style={{
+                    fontFamily: "inherit",
+                    fontSize: 10,
+                    letterSpacing: "0.18em",
+                    textTransform: "uppercase",
+                    color: "rgba(255,255,255,0.6)",
+                    margin: "0 0 4px",
+                  }}
+                >
+                  {photo.label}
+                </p>
+                <p
+                  style={{
+                    fontSize: 22,
+                    fontStyle: "italic",
+                    color: "#fff",
+                    margin: 0,
+                    lineHeight: 1.2,
+                    fontWeight: 600,
+                  }}
+                >
+                  {photo.title}
+                </p>
+              </div>
             </div>
-          </div>
-        </div>
-      ))}
-
-      <button
-        onClick={prev}
-        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center border border-white/20 transition-all"
-        aria-label="Previous slide"
-      >
-        <FiChevronLeft size={16} />
-      </button>
-      <button
-        onClick={next}
-        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center border border-white/20 transition-all"
-        aria-label="Next slide"
-      >
-        <FiChevronRight size={16} />
-      </button>
-
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
-        {bannerSlides.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => goTo(i)}
-            className={`rounded-full transition-all duration-300 ${
-              i === active ? 'w-5 h-2 bg-pink-300' : 'w-2 h-2 bg-white/50 hover:bg-white/80'
-            }`}
-            aria-label={`Go to slide ${i + 1}`}
-          />
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -528,17 +688,17 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
       <HeroCarousel />
 
       {/* ══ FEATURES STRIP ══ */}
-      <FeaturesStrip />
+      {/* <FeaturesStrip /> */}
 
       {/* ══ CATEGORIES ══ */}
       <section className="py-12 sm:py-16 md:py-20 bg-pink-50/50 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <SectionHeading script="Our Collections" title="Shop by Category" dividerText="✦ EXPLORE ✦" />
+          <SectionHeading title="Our Collections" dividerText="✦ EXPLORE ✦" />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {categories.map((cat) => (
               <Link key={cat.slug} href={`/collections/${cat.slug}`} className="block group">
                 <div
-                  className="relative rounded-2xl overflow-hidden border border-pink-100 shadow-sm hover:shadow-md transition-shadow"
+                  className="relative overflow-hidden shadow-sm hover:shadow-md transition-shadow"
                   style={{ aspectRatio: '3/4' }}
                 >
                   <img
@@ -548,11 +708,11 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
                     loading="lazy"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
-                      e.currentTarget.parentElement.style.background = '#fce7f3';
+                      e.currentTarget.parentElement.style.background = '#fb96cf';
                     }}
                   />
                   <div className={`absolute inset-0 bg-gradient-to-b ${cat.gradient}`} />
-                  <div className="absolute inset-0 rounded-2xl ring-2 ring-pink-400/0 group-hover:ring-pink-400/50 transition-all duration-300" />
+                  <div className="absolute inset-0 group-hover:ring-pink-400/50 transition-all duration-300" />
 
                   <div className="absolute inset-0 flex flex-col items-center justify-end p-3 sm:p-4 pb-5 sm:pb-6">
                     <h3 className="font-serif text-white text-sm sm:text-base md:text-lg font-bold text-center leading-snug drop-shadow-md">
@@ -575,7 +735,7 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
       </section>
 
       {/* ══ FEATURED PRODUCTS ══ */}
-      {featuredProducts.length > 0 && (
+      {/* {featuredProducts.length > 0 && (
         <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-white">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-8 sm:mb-10 gap-2">
@@ -595,12 +755,12 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
             </div>
           </div>
         </section>
-      )}
+      )} */}
 
       {/* ══ BANNER CAROUSEL ══ */}
       <section className="py-8 sm:py-12 md:py-14 bg-pink-50/50 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <BannerCarousel />
+          <PhotoCardCarousel/>
         </div>
       </section>
 
@@ -608,7 +768,7 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
       {newArrivals.length > 0 && (
         <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-white">
           <div className="max-w-7xl mx-auto">
-            <SectionHeading script="Fresh Picks" title="New Arrivals" dividerText="✦ JUST IN ✦" />
+            <SectionHeading  title="New Arrivals" dividerText="✦ JUST IN ✦" />
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
               {newArrivals.map(p => <ProductCard key={p._id} product={p} />)}
             </div>
@@ -625,7 +785,7 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
       )}
 
       {/* ══ PROMO STRIP ══ */}
-      <section className="relative overflow-hidden py-0">
+      {/* <section className="relative overflow-hidden py-0">
         <div className="relative h-36 sm:h-48">
           <img
             src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1400&q=80"
@@ -654,7 +814,7 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ══ TESTIMONIALS ══ */}
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-pink-50/50">

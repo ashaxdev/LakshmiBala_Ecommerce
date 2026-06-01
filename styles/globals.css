@@ -301,3 +301,14 @@ body {
 @media (max-width: 768px) {
   .hero-video { width: 100%; height: 100%; }
 }
+@font-face {
+  font-family: 'Quirk';
+  src: url('/fonts/Quirk.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.qrik-font {
+  font-family: 'Quirk', cursive;
+}

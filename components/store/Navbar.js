@@ -69,16 +69,25 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16 md:h-20">
             
-            {/* Logo */}
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="flex items-center gap-3">
   <Image
     src="/images/laklogo.png"
     alt="LakshmiBala Fashion Hub"
     width={60}
-    height={12}
+    height={60}
     priority
-    className="h-auto w-auto object-contain"
+    className="object-contain"
   />
+
+  {/* <div className="flex flex-col leading-none">
+    <span className="text-2xl md:text-3xl text-primary qrik-font">
+      LakshmiBala
+    </span>
+
+    <span className="text-xs md:text-sm text-secondary tracking-[0.25em] uppercase mt-1">
+      Fashion Hub
+    </span>
+  </div> */}
 </Link>
 
 
