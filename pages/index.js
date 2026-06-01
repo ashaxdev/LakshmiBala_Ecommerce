@@ -495,7 +495,7 @@ function PhotoCardCarousel() {
         width: "100%",
         overflow: "hidden",
         padding: "40px 0 32px",
-        boxSizing: "border-box",
+        // boxSizing: "border-box",
         position: "relative",
         fontFamily: "sans-serif",
       }}
@@ -511,7 +511,7 @@ function PhotoCardCarousel() {
           bottom: 0,
           left: 0,
           width: 80,
-          background: "linear-gradient(to right, #fff, transparent)",
+          // background: "linear-gradient(to right, #fff, transparent)",
           zIndex: 10,
           pointerEvents: "none",
         }}
@@ -524,7 +524,7 @@ function PhotoCardCarousel() {
           bottom: 0,
           right: 0,
           width: 80,
-          background: "linear-gradient(to left, #fff, transparent)",
+          // background: "linear-gradient(to left, #fff, transparent)",
           zIndex: 10,
           pointerEvents: "none",
         }}
@@ -539,6 +539,7 @@ function PhotoCardCarousel() {
           transform: `translateX(${getTrackX()}px)`,
           transition: "transform 0.7s cubic-bezier(0.77,0,0.175,1)",
           willChange: "transform",
+          
         }}
       >
         {photos.map((photo, i) => {
@@ -571,9 +572,9 @@ function PhotoCardCarousel() {
                 alt={photo.title}
                 loading="lazy"
                 style={{
-                  display: "block",
-                  width: "100%",
-                  height: "100%",
+                  // display: "block",
+                  // width: "100%",
+                  // height: "100%",
                   objectFit: "cover",
                   transform: isCenter ? "scale(1.05)" : "scale(1)",
                   transition: "transform 0.7s ease",
@@ -758,11 +759,9 @@ export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
       )} */}
 
       {/* ══ BANNER CAROUSEL ══ */}
-      <section className="py-8 sm:py-12 md:py-14 bg-pink-50/50 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <PhotoCardCarousel/>
-        </div>
-      </section>
+      <section className="py-8 sm:py-12 md:py-14 px-4 sm:px-6 lg:px-8 bg-black ">
+  <PhotoCardCarousel />
+</section>
 
       {/* ══ NEW ARRIVALS ══ */}
       {newArrivals.length > 0 && (
