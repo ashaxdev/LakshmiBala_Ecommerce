@@ -121,6 +121,7 @@ const testimonials = [
   { name: 'Meena K.',   location: 'Coimbatore', text: 'Best innerwear I have ever bought online. True to size and excellent quality.',                        rating: 4 },
 ];
 
+
 /* ─── Hero Carousel ─────────────────────────────────────────────── */
 function HeroCarousel() {
   const [active, setActive]           = useState(0);
