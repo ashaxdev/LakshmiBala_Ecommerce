@@ -47,31 +47,31 @@ const categories = [
 const heroSlides = [
   {
     id: 1,
-    image: 'images/5.jpeg',
-    tag: 'Welcome to',
-    heading: 'LakshmiBala\nClothing Store',
-    sub: 'Premium kurtis, comfortable nighties, quality innerwear — delivered to your doorstep across India from the heart of Sivakasi, Tamil Nadu.',
-    primaryCta: { label: "Shop Women's Collection", href: '/collections/womens-kurtis' },
-    secondaryCta: { label: "Men's Innerwear", href: '/collections/mens-innerwear' },
+    image: 'images/hero1.jpeg',
+    // tag: 'Welcome to',
+    // heading: 'LakshmiBala\nClothing Store',
+    // sub: 'Premium kurtis, comfortable nighties, quality innerwear — delivered to your doorstep across India from the heart of Sivakasi, Tamil Nadu.',
+    // primaryCta: { label: "Shop Women's Collection", href: '/collections/womens-kurtis' },
+    // secondaryCta: { label: "Men's Innerwear", href: '/collections/mens-innerwear' },
   },
   {
     id: 2,
-    image: 'images/4.jpeg',
-    tag: 'Special Offer',
-    heading: 'Get 20% Off\nYour First Order',
-    sub: 'Use code WELCOME20 at checkout. Valid on all online orders above ₹499.',
-    code: 'WELCOME20',
-    primaryCta: { label: 'Claim Offer', href: '/collections/womens-kurtis' },
-    secondaryCta: null,
+    image: 'images/hero2.jpeg',
+    // tag: 'Special Offer',
+    // heading: 'Get 20% Off\nYour First Order',
+    // sub: 'Use code WELCOME20 at checkout. Valid on all online orders above ₹499.',
+    // code: 'WELCOME20',
+    // primaryCta: { label: 'Claim Offer', href: '/collections/womens-kurtis' },
+    // secondaryCta: null,
   },
   {
     id: 3,
-    image: 'images/6.jpeg',
-    tag: 'Comfort Essentials',
-    heading: 'Sleep Better\nEvery Night',
-    sub: 'Breathable nighties and innerwear for the whole family — premium cotton, everyday prices.',
-    primaryCta: { label: 'Shop Nighties', href: '/collections/womens-nighties' },
-    secondaryCta: { label: "Women's Innerwear", href: '/collections/womens-innerwear' },
+    image: 'images/hero3.jpeg',
+    // tag: 'Comfort Essentials',
+    // heading: 'Sleep Better\nEvery Night',
+    // sub: 'Breathable nighties and innerwear for the whole family — premium cotton, everyday prices.',
+    // primaryCta: { label: 'Shop Nighties', href: '/collections/womens-nighties' },
+    // secondaryCta: { label: "Women's Innerwear", href: '/collections/womens-innerwear' },
   },
 ];
 
@@ -140,15 +140,15 @@ function HeroCarousel() {
   const prev = useCallback(() => goTo((active - 1 + heroSlides.length) % heroSlides.length), [active, goTo]);
 
   useEffect(() => {
-    timerRef.current = setInterval(next, 2500);
+    timerRef.current = setInterval(next, 5500);
     return () => clearInterval(timerRef.current);
   }, [next]);
 
-  const pauseTimer = () => clearInterval(timerRef.current);
+  const pauseTimer  = () => clearInterval(timerRef.current);
   const resumeTimer = () => { timerRef.current = setInterval(next, 2500); };
 
   const onTouchStart = (e) => setTouchStart(e.touches[0].clientX);
-  const onTouchEnd = (e) => {
+  const onTouchEnd   = (e) => {
     if (touchStart === null) return;
     const diff = touchStart - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
@@ -157,227 +157,82 @@ function HeroCarousel() {
 
   return (
     <section
-  className="relative w-full h-screen overflow-hidden"
-  onMouseEnter={pauseTimer}
-  onMouseLeave={resumeTimer}
-  onTouchStart={onTouchStart}
-  onTouchEnd={onTouchEnd}
->
-  {heroSlides.map((slide, i) => (
-    <div
-      key={slide.id}
-      className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
-      style={{
-        opacity: active === i ? 1 : 0,
-        zIndex: active === i ? 10 : 0,
-      }}
+      className="relative w-full h-[70vh] overflow-hidden"
+      onMouseEnter={pauseTimer}
+      onMouseLeave={resumeTimer}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
     >
-      {/* Background Image */}
-      <img
-        src={slide.image}
-        alt={slide.heading}
-        className="absolute inset-0 w-full h-full object-cover object-center"
-        loading={i === 0 ? 'eager' : 'lazy'}
-      />
-
-      {/* Luxury Overlay */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            'linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.55))',
-        }}
-      />
-
-      {/* Decorative Gradient */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,.25) 100%)',
-        }}
-      />
-
-      {/* Content */}
-      <div className="relative z-20 flex items-center justify-center h-full px-6">
-        <div className="max-w-5xl text-center text-white">
-
-          {/* Tag */}
-          <span className="inline-block px-5 py-2 mb-6 text-xs md:text-sm tracking-[4px] uppercase rounded-full border border-white/30 backdrop-blur-sm bg-white/10">
-            {slide.tag}
-          </span>
-
-          {/* Heading */}
-          <h1
-            className="
-              font-bold
-              leading-tight
-              mb-6
-              text-4xl
-              sm:text-5xl
-              md:text-6xl
-              lg:text-7xl
-            "
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              textShadow: '0 5px 25px rgba(0,0,0,.4)',
-            }}
-          >
-            {slide.heading}
-          </h1>
-
-          {/* Subtitle */}
-          <p
-            className="
-              max-w-2xl
-              mx-auto
-              text-base
-              md:text-lg
-              lg:text-xl
-              text-white/90
-              mb-10
-            "
-            style={{
-              fontFamily: "'Playfair Display', serif",
-            }}
-          >
-            {slide.sub}
-          </p>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href={slide.primaryCta.href}
-              className="
-                px-8
-                py-4
-                rounded-full
-                bg-rose-600
-                hover:bg-rose-700
-                text-white
-                font-semibold
-                transition-all
-                duration-300
-                hover:scale-105
-              "
-            >
-              {slide.primaryCta.label}
-            </Link>
-
-            {slide.secondaryCta && (
-              <Link
-                href={slide.secondaryCta.href}
-                className="
-                  px-8
-                  py-4
-                  rounded-full
-                  border
-                  border-white
-                  text-white
-                  hover:bg-white
-                  hover:text-black
-                  transition-all
-                  duration-300
-                  hover:scale-105
-                  font-semibold
-                "
-              >
-                {slide.secondaryCta.label}
-              </Link>
-            )}
-          </div>
+      {heroSlides.map((slide, i) => (
+        <div
+          key={slide.id}
+          className="absolute inset-0 transition-opacity duration-700 ease-in-out"
+          style={{
+            opacity: active === i ? 1 : 0,
+            zIndex:  active === i ? 10 : 0,
+          }}
+        >
+          {/* Background Image */}
+          <img
+            src={slide.image}
+            alt={slide.heading}
+            className="absolute inset-0 w-full h-full object-cover object-center"
+            loading={i === 0 ? 'eager' : 'lazy'}
+          />
         </div>
-      </div>
-    </div>
-  ))}
+      ))}
 
-  {/* Previous Button */}
-  <button
-    onClick={prev}
-    className="
-      absolute
-      left-6
-      top-1/2
-      -translate-y-1/2
-      z-30
-      w-12
-      h-12
-      rounded-full
-      bg-white/15
-      backdrop-blur-md
-      text-white
-      hover:bg-white/25
-      flex
-      items-center
-      justify-center
-      transition
-    "
-  >
-    <FiChevronLeft size={24} />
-  </button>
-
-  {/* Next Button */}
-  <button
-    onClick={next}
-    className="
-      absolute
-      right-6
-      top-1/2
-      -translate-y-1/2
-      z-30
-      w-12
-      h-12
-      rounded-full
-      bg-white/15
-      backdrop-blur-md
-      text-white
-      hover:bg-white/25
-      flex
-      items-center
-      justify-center
-      transition
-    "
-  >
-    <FiChevronRight size={24} />
-  </button>
-
-  {/* Dots */}
-  <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-3">
-    {heroSlides.map((_, i) => (
+      {/* Previous Button */}
       <button
-        key={i}
-        onClick={() => goTo(i)}
-        className={`transition-all duration-300 rounded-full ${
-          active === i
-            ? 'w-10 h-2 bg-white'
-            : 'w-2 h-2 bg-white/50'
-        }`}
-      />
-    ))}
-  </div>
+        onClick={prev}
+        className="
+          absolute left-4 sm:left-6
+          top-1/2 -translate-y-1/2
+          z-30
+          w-10 h-10 sm:w-12 sm:h-12
+          rounded-full
+          bg-white/15 backdrop-blur-md
+          text-white hover:bg-white/25
+          flex items-center justify-center
+          transition
+        "
+      >
+        <FiChevronLeft size={22} />
+      </button>
 
-  {/* Progress Bar */}
-  {/* <div className="absolute bottom-0 left-0 w-full h-[3px] bg-white/10 z-30">
-    <div
-      key={active}
-      className="h-full bg-rose-500 origin-left"
-      style={{
-        animation: 'heroProgress 5s linear forwards',
-      }}
-    />
-  </div> */}
+      {/* Next Button */}
+      <button
+        onClick={next}
+        className="
+          absolute right-4 sm:right-6
+          top-1/2 -translate-y-1/2
+          z-30
+          w-10 h-10 sm:w-12 sm:h-12
+          rounded-full
+          bg-white/15 backdrop-blur-md
+          text-white hover:bg-white/25
+          flex items-center justify-center
+          transition
+        "
+      >
+        <FiChevronRight size={22} />
+      </button>
 
-  <style jsx>{`
-    @keyframes heroProgress {
-      from {
-        transform: scaleX(0);
-      }
-      to {
-        transform: scaleX(1);
-      }
-    }
-  `}</style>
-</section>
+      {/* Dots */}
+      <div className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-2 sm:gap-3">
+        {heroSlides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            className={`transition-all duration-300 rounded-full ${
+              active === i
+                ? 'w-8 sm:w-10 h-2 bg-white'
+                : 'w-2 h-2 bg-white/50'
+            }`}
+          />
+        ))}
+      </div>
+    </section>
   );
 }
 
