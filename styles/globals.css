@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
 :root {
   --primary: #E91E63;
   --primary-dark: #C2185B;

@@ -680,11 +680,51 @@ function FeaturesStrip() {
 /* ─── Main Page ─────────────────────────────────────────────────── */
 export default function HomePage({ featuredProducts = [], newArrivals = [] }) {
   return (
+
+    
     <Layout
       title="Premium Women's Fashion Online — Kurtis, Nighties & Innerwear | LakshmiBala Fashion Hub"
       description="Shop ethnic kurtis, comfortable nighties, and premium innerwear online. LakshmiBala Fashion Hub — quality clothing delivered pan-India. Free shipping above ₹599."
       keywords="women kurtis online sivakasi, buy nighties online tamil nadu, womens innerwear online india, mens innerwear buy online, ethnic wear online"
     >
+    {/* ══ CATEGORIES ══ */}
+<section className="py-12 sm:py-16 md:py-5 bg-pink-50/50  sm:px-6 lg:px-8">
+  <div className="max-w-7xl mx-auto">
+    
+
+    {/* Scrollable on mobile, centered grid on desktop */}
+    <div className="flex gap-5 overflow-x-auto pb-1 sm:justify-center sm:flex-wrap scrollbar-hide">
+      {categories.map((cat) => (
+        <Link
+          key={cat.slug}
+          href={`/collections/${cat.slug}`}
+          className="flex flex-col items-center gap-2.5 flex-shrink-0 group"
+        >
+          {/* Circle */}
+          <div className="p-[3px]  w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-[100px] md:h-[100px]">
+            <div className="w-full h-full rounded-full overflow-hidden  ">
+              <img
+                src={cat.image}
+                alt={cat.label}
+                className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.parentElement.style.background = '#f472b6';
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Label */}
+          <p className="text-xs sm:text-sm font-medium text-gray-800 text-center leading-snug max-w-[90px] sm:max-w-[110px]">
+            {cat.label}
+          </p>
+        </Link>
+      ))}
+    </div>
+  </div>
+</section>
 
       {/* ══ HERO CAROUSEL ══ */}
       <HeroCarousel />
