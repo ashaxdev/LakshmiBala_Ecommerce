@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="bg-text-dark text-white">
       {/* Newsletter */}
-      <div className="bg-gradient-to-r from-primary to-rose-pink py-10">
+      {/* <div className="bg-gradient-to-r from-primary to-rose-pink py-10">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h3 className="font-vibes text-4xl text-white mb-1">Stay in Style</h3>
           <p className="font-poppins text-sm text-white/80 mb-6">Subscribe for exclusive deals and new arrivals from Sivakasi</p>
@@ -20,7 +20,7 @@ export default function Footer() {
             </button>
           </form>
         </div>
-      </div>
+      </div> */}
 
       {/* Main footer */}
       <div className="max-w-7xl mx-auto px-4 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
